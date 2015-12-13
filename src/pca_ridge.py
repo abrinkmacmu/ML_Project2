@@ -15,16 +15,20 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
 from sklearn.kernel_ridge import KernelRidge
-from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression
+from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression, Lasso
 
 ''' Notes
-    1) alpha value has little to no effect on outcome
+    1) Ridge alpha value has little to no effect on outcome
     2) Kernel Ridge regression 
         rbf, polynomial of higher degree, sigmoid kernels are garbage
-    3) PCA
-        50 -  score of 63.5
-        100 - score of 66.1 (rmse = .535688)
         
+    Results
+        PCA 50 -  Ridge score of 63.5
+        PCA 100 - Ridge score of 66.1 (rmse = .535688)
+        PCA 200 - Ridge score of 64.2
+              
+        PCA 50 -  Lasso score of 62.5
+        PCA 100 - Lasso score of 65
     
     
 end Notes'''
@@ -44,13 +48,10 @@ provideIdx = provideIdx.ravel()
 missIdx = import_missidx['missIdx'] - 1 # since Matlab indexing starts at 1
 missIdx = missIdx.ravel()
 events = import_events['events']
-
 X_test_raw = import_providedata['provideData'] # size = (1000, 3172)
-
 XY_train_raw = import_train['Xtrain']
 X_train_raw = XY_train_raw[:,provideIdx] # size = (500, 3172)
 Y_train_raw = XY_train_raw[:,missIdx] # size = (500, 2731)
-
 
 ## Standardization
 scaler = preprocessing.StandardScaler().fit(X_train_raw)
@@ -58,7 +59,7 @@ X_train_scaled = scaler.transform(X_train_raw)
 X_test_scaled = scaler.transform(X_test_raw)
 
 ## PCA and Feature Selection
-pca = PCA(n_components=100)
+pca = PCA(n_components=200)
 pca.fit(X_train_scaled)
 print(pca.explained_variance_ratio_) 
 X_train_reduced = pca.transform(X_train_scaled)
@@ -76,15 +77,15 @@ for train, test in k_fold:
     ## Train Classifiers on fold
     rdg_clf = Ridge(alpha=.5)
     rdg_clf.fit(X1,Y1)
-    lin_clf = LinearRegression()
-    lin_clf.fit(X1,Y1)
+    lso_clf = Lasso(alpha=.1)
+    lso_clf.fit(X1,Y1)
         
     ## Score Classifiers on fold
     rdg_clf_score = rdg_clf.score(X2, Y2)
-    lin_clf_score = lin_clf.score(X2, Y2)
+    lso_clf_score = lso_clf.score(X2, Y2)
 
-    print "Ridge:    ", rdg_clf_score
-    print "Linear: ", lin_clf_score
+    print "Ridge:  ", rdg_clf_score
+    print "Lasso:  ", lso_clf_score
 
 
 ## Train final Classifiers
