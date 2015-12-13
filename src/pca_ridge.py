@@ -15,7 +15,19 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
 from sklearn.kernel_ridge import KernelRidge
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression
+
+''' Notes
+    1) alpha value has little to no effect on outcome
+    2) Kernel Ridge regression 
+        rbf, polynomial of higher degree, sigmoid kernels are garbage
+    3) PCA
+        50 -  score of 63.5
+        100 - score of 66.1 (rmse = .535688)
+        
+    
+    
+end Notes'''
 
 file_loc = '/home/apark/Homework/ML_Project2/data/'
 
@@ -45,23 +57,15 @@ scaler = preprocessing.StandardScaler().fit(X_train_raw)
 X_train_scaled = scaler.transform(X_train_raw)
 X_test_scaled = scaler.transform(X_test_raw)
 
-#scaler2 = preprocessing.StandardScaler().fit(Y_train_raw)
-#Y_train_scaled = scaler2.transform(Y_train_raw)
-
 ## PCA and Feature Selection
 pca = PCA(n_components=100)
 pca.fit(X_train_scaled)
 print(pca.explained_variance_ratio_) 
 X_train_reduced = pca.transform(X_train_scaled)
 X_test_reduced = pca.transform(X_test_scaled)
-#Y_train_reduced = pca.transform(Y_train_scaled)
-
 
 ## Create K folds
-
 k_fold = KFold(Y_train_raw.shape[0], n_folds=10)
-
-## Run cross validation
 for train, test in k_fold:
     X1 = X_train_reduced[train]
     Y1 = Y_train_raw[train]
@@ -70,35 +74,23 @@ for train, test in k_fold:
     Y2 = Y_train_raw[test]    
 
     ## Train Classifiers on fold
-    rdg_clf = Ridge(alpha=.1)
+    rdg_clf = Ridge(alpha=.5)
     rdg_clf.fit(X1,Y1)
-    krr_clf = KernelRidge(alpha=.1)
-    krr_clf.fit(X1,Y1)
-
+    lin_clf = LinearRegression()
+    lin_clf.fit(X1,Y1)
+        
     ## Score Classifiers on fold
     rdg_clf_score = rdg_clf.score(X2, Y2)
-    krr_clf_score = krr_clf.score(X2, Y2)
+    lin_clf_score = lin_clf.score(X2, Y2)
 
     print "Ridge:    ", rdg_clf_score
-    print "KernelRR: ", krr_clf_score
+    print "Linear: ", lin_clf_score
 
 
 ## Train final Classifiers
-clf = Ridge(alpha=.1)
+clf = Ridge(alpha=.5)
 clf.fit(X_train_reduced, Y_train_raw)
 Y_predicted = clf.predict(X_test_reduced)
 
-## Voting
-'''
-Y_vote = np.zeros((len(Y_predicted),3))
-for i in range (0,len(Y_predicted)):
-    if (Y_predicted[i] == 0):
-        Y_vote[i,0] = 1
-    elif(Y_predicted[i] == 1):
-        Y_vote[i,1] = 1
-    elif(Y_predicted[i] == 3):
-        Y_vote[i,2] = 1
-'''
-
 ## Save results to csv
-np.savetxt('prediction.csv', Y_predicted, fmt='%.1d',delimiter=',')
+np.savetxt('prediction.csv', Y_predicted, fmt='%.5f',delimiter=',')
