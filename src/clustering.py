@@ -78,17 +78,17 @@ Y_predicted = clf.predict(X_test_reduced)
 ## clustering algorithm
 
 RADIUS = 1.0
-STD_THRESHOLD = .55
+STD_THRESHOLD = .45
 n_train_samples = X_train_raw.shape[0]
 n_test_samples = X_test_raw.shape[0]
 n_features = provideIdx.shape[0]
 n_labels = missIdx.shape[0]
-
+'''
 sum = 0
 std = np.zeros(X_train_raw.shape)
 test_mean = np.zeros([n_test_samples, n_labels])
 test_median = np.zeros([n_test_samples, n_labels])
-feature_std = np.zeros([missIdx.shape[0],1])
+label_std = np.zeros([n_labels,1])
 
 for i in range(0,n_labels):
     thisx = x[missIdx[i]]
@@ -107,7 +107,7 @@ for i in range(0,n_labels):
         local_voxels = X_train_raw[k,local_index[0]]
         std[k,i] = np.std(local_voxels)
         
-    feature_std[i] = np.sum(np.abs(std[:,i]))/std.shape[0]
+    label_std[i] = np.sum(np.abs(std[:,i]))/std.shape[0]
     
     for n in range(0,n_test_samples):
         local_voxels = X_test_raw[n,local_index[0]]
@@ -115,14 +115,15 @@ for i in range(0,n_labels):
         test_median[n,i] = np.median(local_voxels)
     
 print 'average k neighbors is', sum / (i + 1), 'for RADIUS =',RADIUS 
-
-
-for j in range(0,n_features): #features
-    if(feature_std[j] < STD_THRESHOLD):    
-        for i in range(0,Y_predicted.shape[0]): # samples
-            Y_predicted[i,j] = test_mean[i,j]
+'''
+n_replaced = 0
+for j in range(0,n_labels): #features
+    if(label_std[j] < STD_THRESHOLD):
+        n_replaced = n_replaced + 1
+        for i in range(0,n_test_samples): # samples
+            Y_predicted[i,j] = np.mean( [test_median[i,j], Y_predicted[i,j]])
          
-
+print 'n_replaced',n_replaced
 
 ## Save results to csv
 np.savetxt('prediction.csv', Y_predicted, fmt='%.5f',delimiter=',')
