@@ -40,7 +40,7 @@ from sklearn.svm import SVR, LinearSVR
     
 end Notes'''
 
-file_loc = '/home/abhishekb/ML_Project2/data/'
+file_loc = '/home/apark/Homework/ML_Project2/data/'
 
 ## Import data
 import_test = sio.loadmat(file_loc + 'Test.mat')
@@ -74,13 +74,6 @@ X_test_scaled = scaler.transform(X_test_raw)
 
 ## PCA and Feature Selection
 
-'''pca = PCA(n_components=100)  
-pca.fit(X_train_scaled)
-#print(pca.explained_variance_ratio_) 
-X_train_reduced = pca.transform(X_train_scaled)
-X_test_reduced = pca.transform(X_test_scaled)
-'''
-
 pca = PCA(n_components=800)
 selection = SelectKBest(k=850)
 combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
@@ -101,31 +94,26 @@ for train, test in k_fold:
     ## Train Classifiers on fold
     rdg_clf = Ridge(alpha=.5)
     rdg_clf.fit(X1,Y1)
-    lso_clf = Lasso(alpha=.03)
+    lso_clf = Lasso(alpha=.6257)
     lso_clf.fit(X1,Y1)
-    svr_rbf = LinearSVR(kernel='rbf', C=1e3, gamma=0.1)
-    svr_rbf.fit(X1, Y1)
-    svr_lin = LinearSVR(kernel='linear', C=1e3)
-    svr_lin.fit(X1, Y1)
-    svr_poly = LinearSVR(kernel='poly', C=1e3, degree=2)
-    svr_poly.fit(X1, Y1)
+    svr_clf = LinearSVR( C=1e3)
+    svr_clf.fit(X1, Y1)
+
 
     ## Score Classifiers on fold
     rdg_clf_score = rdg_clf.score(X2, Y2)
     lso_clf_score = lso_clf.score(X2, Y2)
-    svr_rbf_clf_score = svr_rbf.score(X2, Y2)
-    svr_lin_clf_score = svr_lin.score(X2, Y2)
-    svr_poly_clf_score = svr_poly.score(X2, Y2)
+    svr_clf_score = svr_clf.score(X2, Y2)
+
 
     print "Ridge:  ", rdg_clf_score
     print "Lasso:  ", lso_clf_score
-    print "SVR_RBF:  ", svr_rbf_clf_score
-    print "SVR_LIN:  ", svr_lin_clf_score
-    print "SVR_POLY:  ", svr_poly_clf_score
+    print "SVR_RBF:  ", svr_clf_score
+
     
 ## Train final Classifiers
 #clf = Ridge(alpha=.5)
-clf = Lasso(alpha=.03)
+clf = LinearSVR( C=1e3, gamma=0.1)
 clf.fit(X_train_reduced, Y_train_raw)
 Y_predicted = clf.predict(X_test_reduced)
 

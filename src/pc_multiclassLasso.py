@@ -17,7 +17,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
 #from sklearn.kernel_ridge import KernelRidge
-from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression, Lasso, MultiTaskLassoCV
+from sklearn.linear_model import Ridge, MultiTaskLasso, Lasso, MultiTaskLassoCV
 
 ''' Notes
         
@@ -69,34 +69,35 @@ combined_features.fit(X_train_scaled, train_labels.ravel())
 X_train_reduced = combined_features.transform(X_train_scaled)
 X_test_reduced = combined_features.transform(X_test_scaled)
 
+## Create K folds
+k_fold = KFold(Y_train_raw.shape[0], n_folds=4)
+for train, test in k_fold:
+    X1 = X_train_reduced[train]
+    Y1 = Y_train_raw[train]
+    
+    X2 = X_train_reduced[test]
+    Y2 = Y_train_raw[test]    
+
+    ## Train Classifiers on fold
+    mcl_clf = MultiTaskLasso(alpha=.6257)
+    mcl_clf.fit(X1, Y1)
+
+
+    ## Score Classifiers on fold
+
+    mcl_clf_score = mcl_clf.score(X2, Y2)
+
+    print "MultiTaskLasso:  ", mcl_clf_score
+
+
+
 ## Lasso CV for parameter optimization
 t1 = time.time()
-alps = np.linspace(.1,.625,15)
-model = MultiTaskLassoCV(cv=5, alphas=alps).fit(X_train_reduced, Y_train_raw)
+clf = MultiTaskLasso(alpha=.6257).fit(X_train_reduced, Y_train_raw)
 t_lasso_cv = time.time() - t1
 print 'time to train', t_lasso_cv
 
-# Display results
-m_log_alphas = -np.log10(model.alphas_)
-
-plt.figure()
-plt.plot(m_log_alphas, model.mse_path_, ':')
-plt.plot(m_log_alphas, model.mse_path_.mean(axis=-1), 'k',
-         label='Average across the folds', linewidth=2)
-plt.axvline(-np.log10(model.alpha_), linestyle='--', color='k',
-            label='alpha: CV estimate')
-
-plt.legend()
-
-plt.xlabel('-log(alpha)')
-plt.ylabel('Mean square error')
-plt.title('Mean square error on each fold: coordinate descent '
-          '(train time: %.2fs)' % t_lasso_cv)
-plt.axis('tight')
-
-plt.show()
-
-Y_predicted = model.predict(X_test_reduced)
+Y_predicted = clf.predict(X_test_reduced)
 
 ## Save results to csv
 np.savetxt('prediction.csv', Y_predicted, fmt='%.5f',delimiter=',')
