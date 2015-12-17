@@ -14,24 +14,6 @@ from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
-#from sklearn.kernel_ridge import KernelRidge
-from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression, Lasso
-
-''' Notes
-    1) Ridge alpha value has little to no effect on outcome
-    2) Kernel Ridge regression 
-        rbf, polynomial of higher degree, sigmoid kernels are garbage
-        
-    Results
-        PCA 50 -  Ridge score of 63.5
-        PCA 100 - Ridge score of 66.1 (rmse = .535688)
-        PCA 200 - Ridge score of 64.2
-              
-        PCA 50 -  Lasso score of 62.5
-        PCA 100 - Lasso score of 65
-    
-    
-end Notes'''
 
 file_loc = '/home/abhishekb/ML_Project2/data/'
 
@@ -60,56 +42,89 @@ X_train_raw = np.vstack((X_train_raw_1, X_train_raw_2))
 Y_train_raw = np.vstack((Y_train_raw_1, Y_train_raw_2))
 train_labels = np.vstack((import_test_labels['Ytest'],import_train['Ytrain'])) #labels of the original train data
 
+## Approach 2
 ## Standardization
 scaler = preprocessing.StandardScaler().fit(X_train_raw)
 X_train_scaled = scaler.transform(X_train_raw)
-X_test_scaled = scaler.transform(X_test_raw)
 
 ## PCA and Feature Selection
-
-'''pca = PCA(n_components=100)  
-pca.fit(X_train_scaled)
-#print(pca.explained_variance_ratio_) 
-X_train_reduced = pca.transform(X_train_scaled)
-X_test_reduced = pca.transform(X_test_scaled)
-'''
-
 pca = PCA(n_components=800)
 selection = SelectKBest(k=850)
 combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
 combined_features.fit(X_train_scaled, train_labels.ravel())
-#print(pca.explained_variance_ratio_) 
 X_train_reduced = combined_features.transform(X_train_scaled)
-X_test_reduced = combined_features.transform(X_test_scaled)
 
-## Create K folds
-k_fold = KFold(Y_train_raw.shape[0], n_folds=10)
-for train, test in k_fold:
-    X1 = X_train_reduced[train]
-    Y1 = Y_train_raw[train]
-    
-    X2 = X_train_reduced[test]
-    Y2 = Y_train_raw[test]    
-
-    ## Train Classifiers on fold
-    rdg_clf = Ridge(alpha=.5)
-    rdg_clf.fit(X1,Y1)
-    lso_clf = Lasso(alpha=.01)
-    lso_clf.fit(X1,Y1)
-        
-    ## Score Classifiers on fold
-    rdg_clf_score = rdg_clf.score(X2, Y2)
-    lso_clf_score = lso_clf.score(X2, Y2)
-
-    print "Ridge:  ", rdg_clf_score
-    print "Lasso:  ", lso_clf_score
-
-
-## Train final Classifiers
-#clf = Ridge(alpha=.5)
 clf = Lasso(alpha=.01)
 clf.fit(X_train_reduced, Y_train_raw)
 Y_predicted = clf.predict(X_test_reduced)
 
+X_train_raw_new = np.vstack((X_train_raw,Y_predicted)) 
+
+## Standardization
+scaler = preprocessing.StandardScaler().fit(X_train_raw_new)
+X_train_scaled_new = scaler.transform(X_train_raw_new)
+
+## PCA and Feature Selection
+pca = PCA(n_components=800)
+selection = SelectKBest(k=450)
+combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
+combined_features.fit(X_train_scaled_new, train_labels.ravel())
+X_train_reduced_new = combined_features.transform(X_train_scaled_new)
+
+##Approach 1
+## Standardization
+scaler = preprocessing.StandardScaler().fit(X_train_raw)
+X_train_scaled = scaler.transform(X_train_raw)
+
+## PCA and Feature Selection
+pca = PCA(n_components=800)
+selection = SelectKBest(k=450)
+combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
+combined_features.fit(X_train_scaled, train_labels.ravel())
+X_train_reduced = combined_features.transform(X_train_scaled)
+
+## Create K folds
+Y_kf = train_labels.ravel()
+k_fold = StratifiedKFold(Y_kf, n_folds=5)
+
+## Run cross validation
+
+sum1 = 0
+sum2 = 0
+for train, test in k_fold:
+    X1 = X_train_reduced[train]
+    Z1 = train_labels[train]
+    Z1 = Z1.ravel()
+    
+    X2 = X_train_reduced[test]
+    Z2 = train_labels[test]
+    
+    ## Train Classifiers on fold
+    clf_1 = svm.SVC(kernel='rbf', gamma=0.0001, C=10, probability=True).fit(X1, Z1)
+    
+    X1_new = X_train_reduced_new[train]
+    
+    X2_new = X_train_reduced_new[test]
+
+    ## Train Classifiers on fold
+    clf_2 = svm.SVC(kernel='rbf', gamma=0.0001, C=10, probability=True).fit(X1_new, Z1)
+        
+    ## Score Classifiers on fold
+    clf_1_score = clf_1.score(X2, Z2)
+    clf_2_score = clf_2.score(X2_new, Z2)
+    
+    print "Approach 1 ",clf_1_score
+    print "Approach2 ",clf_2_score
+    sum1 = sum1 + clf_1_score
+    sum2 = sum2 + clf_2_score
+
+print 'final result'
+print 'Approach 1 :', sum1/5.0
+print 'Approach 2 :', sum2/5.0
+    
+## Train final Classifiers
+#clf = svm.SVC(kernel='rbf', gamma=0.0001, C=10, probability=True).fit(X_train_reduced, Y_train.ravel())
+#Y_predicted = clf.predict(X_test_reduced)
+
 ## Save results to csv
-np.savetxt('prediction.csv', Y_predicted, fmt='%.5f',delimiter=',')
+#np.savetxt('prediction.csv', Y_predicted, fmt='%.1d',delimiter=',')
