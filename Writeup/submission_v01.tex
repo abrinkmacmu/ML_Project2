@@ -5,9 +5,7 @@
 \usepackage{graphicx}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
 
-
 \title{Machine Learning Project}
-
 
 \author{
 Alex Brinkman\\
@@ -23,14 +21,6 @@ Pittsburgh, PA 15213 \\
 \texttt{abhatia1@andrew.cmu.edu} \\
 }
 
-% The \author macro works with any number of authors. There are two commands
-% used to separate the names and addresses of multiple authors: \And and \AND.
-%
-% Using \And between authors leaves it to \LaTeX{} to determine where to break
-% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
-% puts 3 of 4 authors names on the first line, and the last on the second
-% line, try using \AND instead of \And before the third author name.
-
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
 
@@ -38,31 +28,32 @@ Pittsburgh, PA 15213 \\
 
 \begin{document}
 
-
 \maketitle
 
 \begin{abstract}
-abstract goes here
+abstract goes here TODO
+
 \end{abstract}
 
 \section{Part 1}
-
 The goal of the project for part 1 is to classify subject behavior baed on raw voxel activation values.  The final approach developed to achieve this goal includes an SVM classifier, custom feature extraction, and a voting method. The resulting accuracy was 60.47\% on the holdout data set.
+
 \subsection{SVM Classifier}
 Abhishek
-\subsection{Custom Feature Extraction}
 
+\subsection{Custom Feature Extraction}
 The custom feature extraction....
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
-%\framebox[4.0in]{$\;$}
-\includegraphics[scale=.5]{media/cross_validation_figure_2.png}
+\includegraphics[scale=.4]{media/pos_activation_formatted.png}
 \end{center}
 \caption{Sample figure caption.}
 \end{figure}
 
-\begin{table}[t]
+
+
+\begin{table}[H]
 \caption{Sample table title}
 \label{sample-table}
 \begin{center}
@@ -81,6 +72,20 @@ etc		&etc\\
 \section{Part 2}
 \subsection{Ridge and Lasso Classifiers}
 \subsection{MultiTaskLasso Cross Validation}
+
+MultiTask Lasso begin
+
+
+\begin{figure}[H]
+\begin{center}
+%\framebox[4.0in]{$\;$}
+\includegraphics[scale=.5]{media/cross_validation_figure_2.png}
+\end{center}
+\caption{Sample figure caption.}
+\end{figure}
+
+multitask lasso end
+
 \subsection{Euclidean Clustering}
 
 
