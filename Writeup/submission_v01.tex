@@ -5,38 +5,21 @@
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
 
 
-\title{Formatting Instructions for NIPS 2015}
+\title{Machine Learning Project}
 
 
 \author{
-Alex Brinkman\thanks{ Use footnote for providing further information
-about author (webpage, alternative address)---\emph{not} for acknowledging
-funding agencies.} \\
+Alex Brinkman\\
 Robotics Institute\\
 Carnegie Mellon University\\
 Pittsburgh, PA 15213 \\
 \texttt{abrinkma@andrew.cmu.edu} \\
 \And
-Coauthor \\
-Affiliation \\
-Address \\
-\texttt{email} \\
-\AND
-Coauthor \\
-Affiliation \\
-Address \\
-\texttt{email} \\
-\And
-Coauthor \\
-Affiliation \\
-Address \\
-\texttt{email} \\
-\And
-Coauthor \\
-Affiliation \\
-Address \\
-\texttt{email} \\
-(if needed)\\
+Abhishek Bhatia \\
+Robotics Institute \\
+Carnegie Mellon University\\
+Pittsburgh, PA 15213 \\
+\texttt{abhatia1@andrew.cmu.edu} \\
 }
 
 % The \author macro works with any number of authors. There are two commands
@@ -50,7 +33,7 @@ Address \\
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
 
-%\nipsfinalcopy % Uncomment for camera-ready version
+\nipsfinalcopy % Uncomment for camera-ready version
 
 \begin{document}
 
@@ -58,22 +41,12 @@ Address \\
 \maketitle
 
 \begin{abstract}
-The abstract paragraph should be indented 1/2~inch (3~picas) on both left and
-right-hand margins. Use 10~point type, with a vertical spacing of 11~points.
-The word \textbf{Abstract} must be centered, bold, and in point size 12. Two
-line spaces precede the abstract. The abstract must be limited to one
-paragraph.
+abstract goes here
 \end{abstract}
 
-\section{Submission of papers to NIPS 2015}
+\section{Part 1}
 
-NIPS requires electronic submissions.  The electronic submission site is  
-\begin{center}
-   \url{http://papers.nips.cc}
-\end{center}
-
-Please read carefully the
-instructions below, and follow them faithfully.
+The goal of the project for part 1 is to classify subject behavior baed on raw voxel activation values.  The final approach developed to achieve this goal includes an SVM classifier, custom feature extraction, and a voting method. The resulting accuracy was 60.47\% on the holdout data set
 \subsection{Style}
 
 Papers to be submitted to NIPS 2015 must be prepared according to the
