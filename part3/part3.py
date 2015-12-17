@@ -56,9 +56,11 @@ X_train_reduced = combined_features.transform(X_train_scaled)
 
 clf = Lasso(alpha=.01)
 clf.fit(X_train_reduced, Y_train_raw)
-Y_predicted = clf.predict(X_test_reduced)
+Y_predicted = clf.predict(X_train_reduced)
 
-X_train_raw_new = np.vstack((X_train_raw,Y_predicted)) 
+#Y_predicted = np.vstack(())
+
+X_train_raw_new = np.hstack((X_train_raw,Y_predicted)) 
 
 ## Standardization
 scaler = preprocessing.StandardScaler().fit(X_train_raw_new)
