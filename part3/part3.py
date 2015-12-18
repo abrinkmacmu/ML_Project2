@@ -14,6 +14,8 @@ from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
+from sklearn.linear_model import Ridge, LogisticRegression, LinearRegression, Lasso
+
 
 file_loc = '/home/abhishekb/ML_Project2/data/'
 

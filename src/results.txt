@@ -104,3 +104,17 @@ Ridge:   -0.307189843303
 Lasso:   0.581549406464
 Ridge:   -0.475565970041
 Lasso:   0.530487340982
+
+Approach 1  0.571428571429
+Approach2  0.564784053156
+Approach 1  0.591362126246
+Approach2  0.571428571429
+Approach 1  0.61
+Approach2  0.59
+Approach 1  0.61
+Approach2  0.61
+Approach 1  0.593333333333
+Approach2  0.576666666667
+final result
+Approach 1 : 0.595224806202
+Approach 2 : 0.58257585825
