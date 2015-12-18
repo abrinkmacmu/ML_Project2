@@ -61,7 +61,8 @@ clf = MultiTaskLasso(alpha=.3)
 clf.fit(X_train_reduced, Y_train_raw)
 Y_predicted = clf.predict(X_train_reduced)
 
-
+interval = [1,2,3,4,5,6,10,50,500]
+for iteration in interval:
     #Y_predicted = np.vstack(())
     replacement_mod = iteration; # 1500-perfect 0-predicted
     print 'replacement_mod', replacement_mod
