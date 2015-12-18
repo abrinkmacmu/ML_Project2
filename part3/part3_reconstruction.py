@@ -15,6 +15,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.linear_model import MultiTaskLasso
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import mean_squared_error
 import matplotlib.cm as cm
 
 #file_loc = '/home/abhishekb/ML_Project2/data/'
@@ -60,10 +61,9 @@ clf = MultiTaskLasso(alpha=.3)
 clf.fit(X_train_reduced, Y_train_raw)
 Y_predicted = clf.predict(X_train_reduced)
 
-interval = np.linspace(0,1500,15)
-for iteration in range(interval):
+
     #Y_predicted = np.vstack(())
-    replacement_mod = interval[iteration]; # 1500-perfect 0-predicted
+    replacement_mod = iteration; # 1500-perfect 0-predicted
     print 'replacement_mod', replacement_mod
     Y_reconstruction = Y_train_raw
     for i in range(0,Y_train_raw.shape[0]):
@@ -71,7 +71,7 @@ for iteration in range(interval):
             print i
             Y_reconstruction[i,:] = Y_predicted[i,:] 
             
-    recon_acc = accuracy_score(Y_train_raw, Y_reconstruction)
+    recon_acc = mean_squared_error(Y_train_raw, Y_reconstruction)
     print 'reconstruction accuracy:', recon_acc
     
     
