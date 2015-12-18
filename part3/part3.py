@@ -15,8 +15,8 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline, FeatureUnion
 import matplotlib.cm as cm
 
+#file_loc = '/home/abhishekb/ML_Project2/data/'
 file_loc = '/home/apark/Homework/ML_Project2/data/'
-
 ## Import data
 import_test = sio.loadmat(file_loc + 'Test.mat')
 import_train = sio.loadmat(file_loc + 'Train.mat')
@@ -36,9 +36,50 @@ X_test_raw = import_providedata['provideData'] # size = (1000, 3172)
 XY_train_raw = import_train['Xtrain']
 X_train_raw_2 = XY_train_raw[:,provideIdx] # size = (500, 3172)
 X_train_raw_1 = X_test_raw_1[:,provideIdx]  
+Y_train_raw_2 = XY_train_raw[:,missIdx] # size = (500, 2731)
+Y_train_raw_1 = X_test_raw_1[:,missIdx]
 X_train_raw = np.vstack((X_train_raw_1, X_train_raw_2))
+Y_train_raw = np.vstack((Y_train_raw_1, Y_train_raw_2))
 train_labels = np.vstack((import_test_labels['Ytest'],import_train['Ytrain'])) #labels of the original train data
 
+## Approach 2
+## Standardization
+scaler = preprocessing.StandardScaler().fit(X_train_raw)
+X_train_scaled = scaler.transform(X_train_raw)
+
+## PCA and Feature Selection
+pca = PCA(n_components=800)
+selection = SelectKBest(k=850)
+combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
+combined_features.fit(X_train_scaled, train_labels.ravel())
+X_train_reduced = combined_features.transform(X_train_scaled)
+
+clf = Lasso(alpha=.01)
+clf.fit(X_train_reduced, Y_train_raw)
+Y_predicted = clf.predict(X_train_reduced)
+
+#Y_predicted = np.vstack(())
+replacement_mod = 10; # 1500-perfect 0-predicted
+Y_reconstruction = Y_train_raw
+for i in range(0,Y_train_raw.shape[0]):
+    if (np.mod(i,replacement_mod) == 0):
+        print i
+        Y_reconstruction[i,:] = Y_predicted[i,:] 
+
+X_train_raw_new = np.hstack((X_train_raw,Y_predicted)) 
+
+## Standardization
+scaler = preprocessing.StandardScaler().fit(X_train_raw_new)
+X_train_scaled_new = scaler.transform(X_train_raw_new)
+
+## PCA and Feature Selection
+pca = PCA(n_components=800)
+selection = SelectKBest(k=450)
+combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
+combined_features.fit(X_train_scaled_new, train_labels.ravel())
+X_train_reduced_new = combined_features.transform(X_train_scaled_new)
+
+##Approach 1
 ## Standardization
 scaler = preprocessing.StandardScaler().fit(X_train_raw)
 X_train_scaled = scaler.transform(X_train_raw)
@@ -48,7 +89,6 @@ pca = PCA(n_components=800)
 selection = SelectKBest(k=450)
 combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
 combined_features.fit(X_train_scaled, train_labels.ravel())
-#print(pca.explained_variance_ratio_) 
 X_train_reduced = combined_features.transform(X_train_scaled)
 
 ## Create K folds
@@ -61,27 +101,30 @@ sum1 = 0
 sum2 = 0
 for train, test in k_fold:
     X1 = X_train_reduced[train]
-    ##Y1 = Y_train_raw[train]
-    ##Y1 = Y1.ravel()
     Z1 = train_labels[train]
     Z1 = Z1.ravel()
     
     X2 = X_train_reduced[test]
-    ##Y2 = Y_train_raw[test]
     Z2 = train_labels[test]
     
     ## Train Classifiers on fold
     clf_1 = svm.SVC(kernel='rbf', gamma=0.0001, C=10, probability=True).fit(X1, Z1)
-    #clf_2 ....
-    #clf_3
     
+    X1_new = X_train_reduced_new[train]
+    
+    X2_new = X_train_reduced_new[test]
+
+    ## Train Classifiers on fold
+    clf_2 = svm.SVC(kernel='rbf', gamma=0.0001, C=10, probability=True).fit(X1_new, Z1)
+        
     ## Score Classifiers on fold
     clf_1_score = clf_1.score(X2, Z2)
+    clf_2_score = clf_2.score(X2_new, Z2)
     
     print "Approach 1 ",clf_1_score
-    #print "Approach2 ",clf_2_score
+    print "Approach2 ",clf_2_score
     sum1 = sum1 + clf_1_score
-    #sum2 = sum2 + clf_2_score
+    sum2 = sum2 + clf_2_score
 
 print 'final result'
 print 'Approach 1 :', sum1/5.0
