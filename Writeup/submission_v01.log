@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.9.7)  18 DEC 2015 01:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.9.7)  18 DEC 2015 15:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -211,6 +211,14 @@ Package graphics Info: Driver file: pdftex.def on input line 91.
 \Gin@req@height=\dimen110
 \Gin@req@width=\dimen111
 )
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen112
+\WF@size=\dimen113
+\c@WF@wrappedlines=\count103
+\WF@box=\box28
+\WF@everypar=\toks15
+Package: wrapfig 2003/01/31  v 3.6
+)
 (./submission_v01.aux
 
 LaTeX Warning: Label `classtable' multiply defined.
@@ -224,52 +232,52 @@ LaTeX Warning: Label `classtable' multiply defined.
 )
 \openout1 = `submission_v01.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 29.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 30.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-\AtBeginShipoutBox=\box28
+\AtBeginShipoutBox=\box29
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count103
-\scratchdimen=\dimen112
-\scratchbox=\box29
-\nofMPsegments=\count104
-\nofMParguments=\count105
-\everyMPshowfont=\toks15
-\MPscratchCnt=\count106
-\MPscratchDim=\dimen113
-\MPnumerator=\count107
-\makeMPintoPDFobject=\count108
-\everyMPtoPDFconversion=\toks16
+\scratchcounter=\count104
+\scratchdimen=\dimen114
+\scratchbox=\box30
+\nofMPsegments=\count105
+\nofMParguments=\count106
+\everyMPshowfont=\toks16
+\MPscratchCnt=\count107
+\MPscratchDim=\dimen115
+\MPnumerator=\count108
+\makeMPintoPDFobject=\count109
+\everyMPtoPDFconversion=\toks17
 )
-Package hyperref Info: Link coloring OFF on input line 29.
+Package hyperref Info: Link coloring OFF on input line 30.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count109
+\c@section@level=\count110
 )
-LaTeX Info: Redefining \ref on input line 29.
-LaTeX Info: Redefining \pageref on input line 29.
-LaTeX Info: Redefining \nameref on input line 29.
+LaTeX Info: Redefining \ref on input line 30.
+LaTeX Info: Redefining \pageref on input line 30.
+LaTeX Info: Redefining \nameref on input line 30.
 
 (./submission_v01.out) (./submission_v01.out)
 \@outlinefile=\write3
@@ -292,20 +300,20 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 32.
+(Font)              <7> on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 32.
+(Font)              <5> on input line 33.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 32.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 33.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
@@ -313,19 +321,28 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 File: media/pos_4x4_formatted.png Graphic file (type png)
 
 <use media/pos_4x4_formatted.png>
-Package pdftex.def Info: media/pos_4x4_formatted.png used on input line 71.
-(pdftex.def)             Requested size: 305.64645pt x 255.05669pt.
+Package pdftex.def Info: media/pos_4x4_formatted.png used on input line 73.
+(pdftex.def)             Requested size: 218.31508pt x 182.18018pt.
+
+Overfull \hbox (19.57259pt too wide) in paragraph at lines 73--74
+ [] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [2 <./media/pos_4x4_formatted.png>] [3]
 <media/cross_validation_figure_2.png, id=80, 578.16pt x 433.62pt>
 File: media/cross_validation_figure_2.png Graphic file (type png)
 
 <use media/cross_validation_figure_2.png>
 Package pdftex.def Info: media/cross_validation_figure_2.png used on input line
- 124.
-(pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
+ 132.
+(pdftex.def)             Requested size: 202.35902pt x 151.76927pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (3.61653pt too wide) in paragraph at lines 132--133
+ [] 
+ []
 
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
@@ -342,40 +359,51 @@ Missing character: There is no ™ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-<media/take2.png, id=82, 369.38pt x 581.17125pt>
+[4 <./media/cross_validation_figure_2.png>]
+<media/take2.png, id=89, 369.38pt x 581.17125pt>
 File: media/take2.png Graphic file (type png)
  <use media/take2.png>
-Package pdftex.def Info: media/take2.png used on input line 170.
+Package pdftex.def Info: media/take2.png used on input line 181.
 (pdftex.def)             Requested size: 129.28493pt x 203.41298pt.
- [4 <./media/cross_validation_figure_2.png>] [5 <./media/take2.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 234.
+
+
+Package wrapfig Warning: Stationary wrapfigure forced to float on input line 18
+7.
+
+[5 <./media/take2.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 246.
  [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 234.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 246.
+ (./submission_v01.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 246.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 246.
 
-(./submission_v01.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 234.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 234.
-Package rerunfilecheck Info: File `submission_v01.out' has not changed.
-(rerunfilecheck)             Checksum: 07FF3A33B8E68A7C4FF555C2501B6B89;828.
 
+Package rerunfilecheck Warning: File `submission_v01.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `submission_v01.out':
+(rerunfilecheck)             Before: 07FF3A33B8E68A7C4FF555C2501B6B89;828
+(rerunfilecheck)             After:  F729B3A9A79247169C59BAEB03C508EB;823.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 234.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 246.
  ) 
 Here is how much of TeX's memory you used:
- 5751 strings out of 493304
- 84269 string characters out of 6139872
- 174314 words of memory out of 5000000
- 9135 multiletter control sequences out of 15000+600000
+ 5816 strings out of 493304
+ 85088 string characters out of 6139872
+ 173522 words of memory out of 5000000
+ 9196 multiletter control sequences out of 15000+600000
  13768 words of font info for 29 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,9n,39p,1040b,345s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,9n,39p,1121b,322s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb>
-Output written on submission_v01.pdf (6 pages, 278889 bytes).
+Output written on submission_v01.pdf (6 pages, 280309 bytes).
 PDF statistics:
  122 PDF objects out of 1000 (max. 8388607)
  105 compressed objects within 2 object streams
