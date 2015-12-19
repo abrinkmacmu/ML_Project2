@@ -32,7 +32,7 @@ Pittsburgh, PA 15213 \\
 \maketitle
 
 \begin{abstract}
-MRI data was captured and labelled for analysis to understand the relationship between 5903 brain voxel values and subject behavior to a time-based task. Part one aims to make a classifier capable of predicting the class label based on a full set of brain voxels. The best approach was to create a voting ensemble between and SVM classifier and two sets of extracted features from domain knowledge coupled with Gaussian naive Bayes classifiers resulting in a prediction accuracy of 63.1\%. Part 2 aims to reconstruct missing voxel intensities from a subset of the full voxel set. The best approach resulted in a root mean square error of .4693 and accomplished this by performing feature selection on the provided voxels and predicting the missing voxels with MultiTaskLasso regression provided by the sklearn API [1]. Part three explains an experiment to classify labels based on the provided voxel subset using direct and indirect estimation methods. The results of the experiment show that directly learning the class label from the provided voxels performed better than indirect learning methods.
+MRI data was captured and labelled for analysis to understand the relationship between 5903 brain voxel values and subject behavior to a time-based task. Part one aims to make a classifier capable of predicting the class label based on a full set of brain voxels. The best approach was to create a voting ensemble between a SVM classifier and two sets of extracted features from domain knowledge coupled with Gaussian naive Bayes classifiers resulting in a prediction accuracy of 63.1\%. Part 2 aims to reconstruct missing voxel intensities from a subset of the full voxel set. The best approach resulted in a root mean square error of .4693 and accomplished this by performing feature selection on the provided voxels and predicting the missing voxels with MultiTaskLasso regression provided by the Scikit-learn API [1]. Part three explains an experiment to classify labels based on the provided voxel subset using direct and indirect estimation methods. The results of the experiment show that directly learning the class label from the provided voxels performed better than indirect learning methods for the given samples and achieved accuracies by each classification.
 
 \end{abstract}
 
@@ -55,11 +55,11 @@ The goal of the project for part 1 is to classify subject behavior based on MRI 
 
 
 \subsection{SVM Classifier}
-The Support Vector Machine (SVM) is a very popular and useful technique used for data classification. But even before beginning with the statistical machine learning techniques, data processing techniques were applied to convert the raw data into suitable form to extract the useful information. We started with standardization of the data for mean removal and variance scaling. This is necessary because the machine learning estimators used might give unexpected results if the data is not in standard, normally distributed form [1]. Other scaling methods were attempted to scale features not across zero mean, but across certain ranges, but ultimately these approaches were inferior to the first standardization method discussed above. Besides scaling, attempts to normalizing individual samples to have unit norm did not improve classifier performance. 
+The Support Vector Machine (SVM) is a very popular and useful technique used for data classification. But even before beginning with the statistical machine learning techniques, data processing techniques were applied to convert the raw data into suitable form to extract the useful information. We started with standardization of the data for mean removal and variance scaling. This is necessary because the machine learning estimators used might give unexpected results if the data is not in standard, normally distributed form [2]. Other scaling methods were attempted to scale features not across zero mean, but across certain ranges, but ultimately these approaches were inferior to the first standardization method discussed above. Besides scaling, attempts to normalizing individual samples to have unit norm did not improve classifier performance. 
 
-After standardization, feature selection and dimensionality reduction techniques were applied to reduce the number of features and only consider important features for classification. Principal Component Analysis (PCA) is a linear dimensionality reduction technique that that uses singular value decomposition of the data and keeps only the most significant singular vectors to project the data to a lower dimension space[2]. Along with PCA,the Univariate Feature Selection method was used for selecting the best features based on univariate statistical tests. The combination of these two methods combine to form the preprocessing step for our estimator[3].The select\_k\_best function was invoked for our feature selection that removes all but k highest scoring features.
+After standardization, feature selection and dimensionality reduction techniques were applied to reduce the number of features and only consider important features for classification. Principal Component Analysis (PCA) is a linear dimensionality reduction technique that that uses singular value decomposition of the data and keeps only the most significant singular vectors to project the data to a lower dimension space[3]. Along with PCA,the Univariate Feature Selection method was used for selecting the best features based on univariate statistical tests. The combination of these two methods combine to form the preprocessing step for our estimator[4].The select\_k\_best function was invoked for our feature selection that removes all but k highest scoring features.
 
-Finally, SVM was used as the supervised learning method for classification. The SVM was selected because of various reasons such as effectiveness with high dimension cases, effective especially in cases where number of features are more than the number of samples, and versatility meaning different kernels can be specified as the decision function[4]. To do the comparison, three different SVM classifiers were evaluated, linear SVM, polynomial SVM and radial basis function (RBF) kernel SVM. Furthermore, cross validation techniques to used to fine tune the parameters and evaluate the overall performance of the pipeline. Ten fold cross validation methods helped avoid overfitting and achieved the best accuracy. Below are the final parameters that gave us the best accuracy:
+Finally, SVM was used as the supervised learning method for classification. The SVM was selected because of various reasons such as effectiveness with high dimension cases, effective especially in cases where number of features are more than the number of samples, and versatility meaning different kernels can be specified as the decision function[5]. To do the comparison, three different SVM classifiers were evaluated, linear SVM, polynomial SVM and radial basis function (RBF) kernel SVM. Furthermore, cross validation techniques to used to fine tune the parameters and evaluate the overall performance of the pipeline. Ten fold cross validation methods helped avoid overfitting and achieved the best accuracy. Below are the final parameters that gave us the best accuracy:
 PCA components = 800
 Univariate Feature Selection (K-best components) = 450
 Linear SVM, C = 10
@@ -110,19 +110,19 @@ Table 2 shows the accuracies achieved on the 10-fold cross validation of the tra
 \end{center}
 \end{table} 
 
-The resulting total accuracy that was achieved on 1000 test data points was 63.1\%.
+The resulting total accuracy that was achieved on the set of 1000 test data points was 63.1\%.
 
 \section{Part 2}
-The goal of project part 2 is to predict the remaining voxel values from the partial fMRI image dataset provided 
+The goal of project part 2 is to reconstruct the intensity values for a set of missing voxels given a subset of the original 5903 voxels in the fMRI brain scan. The missing voxels set consists of 2731 voxels and the provided voxel set consists of 3172 voxels of the original 5903 voxels. The missing voxel set is large relative to the provided feature set which will certainly limit the best possible accuracy however with sufficient data of the brain it should be possible to train a model to predict the missing voxels with acceptable error. To validate this data, the root mean square error will be used.
 
 \subsection{Clustering}
-Geometric clustering could be a way to encode domain knowledge into the classification. The rationale is that missing voxels should have similar intensities to other known voxels in the local subregions in the brain. An algorithm resembling k nearest neighbors was developed to find which known voxels were in the neighborhood of missing voxels. Statistical measures were taken of each subregion for each sample and for each missing voxel.  The standard deviation is a good measure at the uniformity of each missing voxel for each brain scan. If the standard deviation was below some threshold, the missing voxel took on the median or mean of the local known voxels otherwise the missing voxel would take a predicted value from regression. Different k values were attempted along with different standard deviation thresholds to attempt to improve performance. It was discovered this method could improve a poor regression model but after the regression model was better than .55 root mean square error this method only degraded performance and was abandoned. 
+Geometric clustering could be a way to encode domain knowledge into the classification. The rationale is that missing voxels should have similar intensities to other known voxels in the local subregions in the brain. An algorithm resembling k nearest neighbors was developed to find which known voxels were in the neighborhood of missing voxels. Statistical measures were taken of each subregion for each sample and for each missing voxel.  The standard deviation is a good measure at the uniformity of each missing voxel for each brain scan. If the standard deviation was below some threshold, the missing voxel took on the mean of the local known voxels otherwise the missing voxel would take a predicted value from regression. Different k values were attempted along with different standard deviation thresholds to attempt to improve performance. It was discovered this method could improve a poor regression model but after the regression model was better than .55 root mean square error this method only degraded performance and was abandoned. 
 
 \subsection{Regression Classifiers}
 
-To perform regression, similar data processing techniques were used, as described in Section 1.1. The input data was standardized to have a normal distribution and then PCA was applied along and Univariate Feature Selection feature selection techniques to reduce and select the best features. 
+To perform regression, similar data processing techniques were used as in Section 1.1. The input data was standardized to have a normal distribution and then PCA was applied along and Univariate Feature Selection feature selection techniques to reduce and select the best features. 
 
-Several regression models were used to predict the remaining voxel values. Ten fold cross validation was used to compare scores and ensure the model did not over fit the data. Various techniques from the Generalized linear models were attempted such as Ridge regression and Lasso regression with L1 and L2 penalties. These regression models are intended for regression where target values are expected to be a linear combination of input values. After comparing the regression models, the lasso regression model appeared to be best suited for this task.
+Several regression models were used to predict the remaining voxel values. Ten fold cross validation was used to compare scores and ensure the model did not over fit the data. Various techniques from the Generalized linear models were attempted such as Ridge regression and Lasso regression with L1 and L2 penalties[6]. These regression models are intended for regression where target values are expected to be a linear combination of input values. After comparing the regression models, the lasso regression model appeared to be best suited for this task. Sweeping the lasso alpha value across a range of alpha values, indicated that small values of alpha resulted in better prediction accuracy. However, the time to train and predict from models with small alphas less than .1 increased run time from seconds to hours. A lasso alpha value of .05 was selected for its tradeoff with runtime and accuracy, shown in Table 3.
 
 \subsection{MultiTaskLasso Cross Validation}
 
@@ -135,46 +135,42 @@ Several regression models were used to predict the remaining voxel values. Ten f
 	\vspace{-20pt}
 \end{wrapfigure}
 
-After performing PCA, a cross validation parameter sweep was performed from the sklearn api using MultiTaskLassoCV[X]. This function sweeps across the alpha values that penalize the cost function the Lasso model seeks to minimize. The initial run showed cross validation mean squared error to decrease with alpha. Another run was performed on even smaller alpha values looking for the global minimum. Figure 2 shows the resulting cross validation error for different alpha values between 0.1 and 1.0. 
+A cross validation parameter sweep was performed from the Scikit-learn API using MultiTaskLassoCV[7]. This function sweeps across the alpha values that penalize the cost function the Lasso model seeks to minimize using coordinate descent. The initial run showed cross validation mean squared error to decrease with alpha. Another run was performed on even smaller alpha values looking for the global minimum. Figure 2 shows the resulting cross validation error for different alpha values between 0.1 and 1.0. Like with the runtime on the Lasso classifier, the runtime for MulitTaskLassoCV increased with decreasing alpha value.
 
-The optimization shows the global minimum of mean square error occurs at an alpha value of approximately 0.4. A 10 fold cross validation analysis with finer alpha resolution placed the mean square error minimum closer to an alpha of 0.3 This was the final selected classifier used for part 2 assignment submission.
-
+The optimization shows the global minimum of mean square error occurs at an alpha value of approximately 0.4. A 10 fold cross validation analysis with finer alpha resolution placed the mean square error minimum closer to an alpha of 0.3. The result of the 10 fold cross validation is shown in Table 3.
 
 \subsection{Results}
-text
-
-text
-
-text
 
 \begin{table}[h]
 \caption{Cross Validation Accuracy for Part 2}
 \label{classtable}
 \begin{center}
-	\begin{tabular}{ll}
-		\multicolumn{1}{c}{\bf Fold}  &\multicolumn{1}{c}{\bf MultiTaskLasso Accuracy (alpha = .3)} 
+	\begin{tabular}{lll}
+		\multicolumn{1}{c}{\bf Fold}   &\multicolumn{1}{c}{\bf Lasso Accuracy (alpha = .05)} &\multicolumn{1}{c}{\bf MultiTaskLasso Accuracy (alpha = .3)}
 		\\ \hline \\
-		Fold 1   &0.5682 \\
-		Fold 2   &0.5478 \\
-		Fold 3   &0.4765 \\
-		Fold 4   &0.5007   \\
-		Fold 5   &0.5414   \\
-		Fold 6   &0.5126   \\
-		Fold 7   &0.5961 \\
-		Fold 8   &0.5238 \\
-		Fold 9   &0.5832 \\
-		Fold 10   &0.5333 \\
-		Average Accuracy   &0.5384\\
+		Fold 1   &0.5682 &0.5723\\
+		Fold 2   &0.5478 &0.5504\\
+		Fold 3   &0.4765 &0.4844\\
+		Fold 4   &0.5007 &0.5059  \\
+		Fold 5   &0.5414 &0.5449  \\
+		Fold 6   &0.5126 &0.517  \\
+		Fold 7   &0.5961 &0.6011\\
+		Fold 8   &0.5238 &0.5282\\
+		Fold 9   &0.5832 &0.5875\\
+		Fold 10   &0.5333 &0.5393 \\
+		Average Accuracy   &0.5384 & 0.5431\\
 	\end{tabular}
 \end{center}
 \end{table} 
 
+The cross validation results for both the Scikit-learn Lasso and MultiTaskLasso transformers are shown in Table 2. The accuracy for both of these methods is similar which reaffirms these tuned classifiers are not overfitting the data. Since the MultiTaskLassoCV corroborates these models, the final classifier used was the MultiTaskLasso with an alpha of .03.
 The final root mean square error achieved on the holdout set was 0.4693
+
 
 \section{Part 3}
 
 \subsection{Hypothesis}
-Given the a full test set of 1000 samples with full voxel values and class assignments, the hypothesis tested for part three is to evaluate the which classification would perform better directly predicting class labels from the provided voxel subset denoted ‘Direct’ in Figure 3,  or predict the missing voxels and then predict the class labels from the reconstructed full voxel set denoted ‘Indirect’ ’in Figure 3.  The Direct approach is straightforward and does not attempt to waste any information learning the full brain model but will suffer from the smaller set of features to train and test on. The Indirect approach may use a priori knowledge of the brain model to enhance the feature space but may perform poorly if the accuracy of the voxel reconstruction is poor.
+Given the a full test set of 1500 samples with full voxel values and class assignments, the hypothesis to be tested for part three is to evaluate the which classification would perform better directly predicting class labels from the provided voxel subset denoted ‘Direct’ in Figure 3,  or predict the missing voxels first and then predict the class labels from the reconstructed full voxel set denoted ‘Indirect’ in Figure 3.  The Direct approach is straightforward and does not attempt to waste any information learning the full brain model but will suffer from the smaller set of features on which to train and test. The Indirect approach may use a priori knowledge of the brain model to enhance the feature space but may perform poorly if the accuracy of the voxel reconstruction is too inaccurate.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
 	\begin{center}
@@ -189,58 +185,44 @@ To test the Direct and Indirect methods of class prediction from the provided vo
 
 
 \subsection{Results}
-text
 
-text
+Below are the results for the two approaches described above (Direct and Indirect approach) on a five fold cross-validation experiment and also the accuracies achieved on the complete dataset (1500 X 5903). 
 
-text
-
-text
-
-text
-
-text
-
-text
-
-text
-
-text
+From the results, it can be deduced that the Direct approach is a better for the cases where the reconstruction error in generating the missing dataset during the Indirect approach is large, as we can achieve better accuracy with the smaller dataset and at the same time, not waste our resources in first regeneration and then classification. However, if the reconstruction error in generating the missing dataset could be controlled and the regenerated dataset could be as close as possible to the missing dataset, the Indirect approach is better and gives higher accuracy, as can be seen from the 5-fold cross validation accuracies achieved from training the classifier on the complete dataset.
 
 \begin{table}[h]
 \caption{Cross Validation Accuracy for Part 3}
 \label{classtable}
 \begin{center}
-	\begin{tabular}{lll}
-		\multicolumn{1}{c}{\bf Fold}  &\multicolumn{1}{c}{\bf Accuracy of Direct Approach} &\multicolumn{1}{c}{\bf Accuracy of Indirect Approach} 
+	\begin{tabular}{llll}
+		\multicolumn{1}{c}{\bf Fold}  &\multicolumn{1}{c}{\bf Accuracy of Direct Approach} &\multicolumn{1}{c}{\bf Accuracy of Indirect Approach} &\multicolumn{1}{c}{\bf Best Case Accuracy}
 		\\ \hline \\
-		Fold 1   &0.5714 &0.5648 \\
-		Fold 2   &0.5914 &0.5714 \\
-		Fold 3   &0.61 &0.59 \\
-		Fold 4   &0.61   &0.61 \\
-		Fold 5   &0.5933   &0.5767 \\
-		Average Accuracy   &0.5952 &0.5826\\
+		Fold 1   &.5714 &0.5482 &0.598 \\
+		Fold 2   &0.5914 &0.588 &0.6512 \\
+		Fold 3   &0.61 &0.58 &0.6467 \\
+		Fold 4   &0.61   &0.6133 &0.6567 \\
+		Fold 5   &0.5933   &0.58 &0.6067 \\
+		Average Accuracy   &0.5952 &0.5819 &0.6318\\
 	\end{tabular}
 \end{center}
 \end{table} 
 
-FINAL RESULT
-
 \subsubsection*{References}
 
 \small{
-[1] http://scikit-learn.org/stable/modules/preprocessing.html
+[1]Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
 
-[2] http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+[2] http://scikit-learn.org/stable/modules/preprocessing.html
 
-[3] http://scikit-learn.org/stable/modules/feature\_selection.html
+[3] http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
 
-[4] http://scikit-learn.org/stable/modules/svm.html
+[4] http://scikit-learn.org/stable/modules/feature\_selection.html
 
-[5] http://scikit-learn.org/stable/modules/linear\_model.html
+[5] http://scikit-learn.org/stable/modules/svm.html
 
-[x]Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
+[6] http://scikit-learn.org/stable/modules/linear\_model.html
+
+[7] http://scikit-learn.org/stable/modules/generated/sklearn.linear\_model.MultiTaskLassoCV.html
 
 }
-
 \end{document}

@@ -70,24 +70,24 @@ X_train_reduced = combined_features.transform(X_train_scaled)
 X_test_reduced = combined_features.transform(X_test_scaled)
 
 ## Create K folds
-#k_fold = KFold(Y_train_raw.shape[0], n_folds=4)
-#for train, test in k_fold:
-#    X1 = X_train_reduced[train]
-#    Y1 = Y_train_raw[train]
-#    
-#    X2 = X_train_reduced[test]
-#    Y2 = Y_train_raw[test]    
-#
-#    ## Train Classifiers on fold
-#    mcl_clf = MultiTaskLasso(alpha=.6257)
-#    mcl_clf.fit(X1, Y1)
-#
-#
-#    ## Score Classifiers on fold
-#
-#    mcl_clf_score = mcl_clf.score(X2, Y2)
-#
-#    print "MultiTaskLasso:  ", mcl_clf_score
+k_fold = KFold(Y_train_raw.shape[0], n_folds=10)
+for train, test in k_fold:
+    X1 = X_train_reduced[train]
+    Y1 = Y_train_raw[train]
+    
+    X2 = X_train_reduced[test]
+    Y2 = Y_train_raw[test]    
+
+    ## Train Classifiers on fold
+    mcl_clf = MultiTaskLasso(alpha=.3)
+    mcl_clf.fit(X1, Y1)
+
+
+    ## Score Classifiers on fold
+
+    mcl_clf_score = mcl_clf.score(X2, Y2)
+
+    print "MultiTaskLasso:  ", mcl_clf_score
 
 
 
